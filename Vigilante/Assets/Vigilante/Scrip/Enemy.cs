@@ -13,9 +13,11 @@ public class Enemy : MonoBehaviour {
     public Estados estado;
 
     public NavMeshAgent nav;
-   
-
+    Vector3 uiltima_posicion;
+    bool visto;
     public GameObject hero;
+
+
 	// Use this for initialization
 	void Start () {
         timer = 0;
@@ -92,26 +94,38 @@ public class Enemy : MonoBehaviour {
 
     void Perseguir()
     {
-        if((hero.transform.position-transform.position).magnitude <= 10)
+        nav.SetDestination(uiltima_posicion);
+        //if ((hero.transform.position-transform.position).magnitude <= 10)
+        //{
+           
+        //}
+        //else
+        //{
+        //    estado = Estados.Patrullando;
+        //}
+    }
+
+    public void Perimetro()
+    {
+
+        
+
+        if ((hero.transform.position - transform.position).magnitude <= 10)
         {
-            nav.SetDestination(hero.transform.position);
+            transform.LookAt(hero.transform);
+            RaycastHit perimetro;
+            Physics.Raycast(transform.position, transform.TransformDirection(Vector3.forward), out perimetro, 10f);
+            Debug.DrawRay(transform.position, transform.TransformDirection(Vector3.forward) * 10f, Color.red);
+            
+            if (perimetro.collider != null && perimetro.transform.tag == "Hero")
+            {
+                uiltima_posicion = hero.transform.position;
+                estado = Estados.Persiguiendo;
+            }           
         }
         else
         {
             estado = Estados.Patrullando;
         }
-    }
-
-    public void Perimetro()
-    {
-        RaycastHit perimetro;
-        Physics.Raycast(transform.position, transform.TransformDirection(Vector3.forward), out perimetro, 10f);
-        Debug.DrawRay(transform.position, transform.TransformDirection(Vector3.forward) * 10f, Color.red);
-        if (perimetro.collider != null && perimetro.transform.tag == "Hero")
-        {
-            estado = Estados.Persiguiendo;
-        }
-
-
     }
  }
