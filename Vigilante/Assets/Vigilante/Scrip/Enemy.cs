@@ -8,20 +8,22 @@ public enum Estados { Esperando, Patrullando, Persiguiendo };
 public class Enemy : MonoBehaviour {
 
     public float timer;
+    public float timer2;
     Vector3[] positions;
     int pos;
     public Estados estado;
 
     public NavMeshAgent nav;
     Vector3 uiltima_posicion;
-    bool visto;
+    
     public GameObject hero;
     public float distancia = 5;
-    bool mira;
-    bool perimetro;
+
+
 	// Use this for initialization
 	void Start () {
         timer = 0;
+        timer2 = 1.5f;
         pos = 0;
         positions = new Vector3[5];
         positions[0] = new Vector3(22,1,22);
@@ -47,7 +49,7 @@ public class Enemy : MonoBehaviour {
                 break;
             case Estados.Esperando:
                
-                Esperar();
+                Esperar(5f);
                 break;
             case Estados.Persiguiendo:
                 Perseguir();
@@ -73,15 +75,14 @@ public class Enemy : MonoBehaviour {
         {        
             timer = 0f;
             nav.speed = 0f;
-            estado = Estados.Esperando;
-            
+            estado = Estados.Esperando;          
         }     
     }
     
-    void Esperar()
+    void Esperar(float tiempo)
     { 
         timer = timer + Time.deltaTime;
-        if (timer >= 5)
+        if (timer >= tiempo)
         {
             nav.speed = 10;
             pos = 0;
@@ -92,11 +93,22 @@ public class Enemy : MonoBehaviour {
 
     void Perseguir()
     {
-        disparar();
         nav.SetDestination(uiltima_posicion);
-        if((uiltima_posicion - transform.position).magnitude <1)
+        if (Apuntar())
         {
-            estado = Estados.Patrullando;
+            timer2 -= Time.deltaTime;
+            if (timer2 <0)
+            {
+                disparar();
+            }
+            
+        }
+        else
+        {           
+            if ((uiltima_posicion - transform.position).magnitude < 1)
+            {
+                estado = Estados.Patrullando;
+            }
         }
     }
 
@@ -114,14 +126,19 @@ public class Enemy : MonoBehaviour {
 
     public void disparar()
     {
+       
         RaycastHit disparo;
         Physics.Raycast(transform.position, transform.TransformDirection(Vector3.forward), out disparo, distancia);
-        Debug.DrawRay(transform.position, transform.TransformDirection(Vector3.forward) * distancia, Color.black);
+        timer2 = timer2 + Time.deltaTime;
+            Debug.DrawRay(transform.position, transform.TransformDirection(Vector3.forward) * distancia, Color.black);
+            timer2 = 1.5f;
+ 
         if (disparo.collider != null && disparo.transform.tag == "Hero")
         {
-
+            FindObjectOfType<Hero>().Quitar_Vida(1);
+           // disparo.collider.gameObject.GetComponent<Hero>().Quitar_Vida(1);
         }
-        D
+       
     }
 
     public  bool Apuntar()
