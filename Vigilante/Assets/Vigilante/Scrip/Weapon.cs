@@ -7,7 +7,7 @@ using UnityEngine;
 public class Weapon : MonoBehaviour {
 
     int amon;
-    public float distance;
+    public float distance = 50;
 	// Use this for initialization
 	void Start () {
         amon = 10;
