@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class FPSMoving : MonoBehaviour
 {
-    public  float speed = 5f;
+    public  float speed = 3f;
     float spedd;
     Animator anim;
     void Update()
@@ -20,7 +20,7 @@ public class FPSMoving : MonoBehaviour
         MovinPlayer();
     }
     private void Start()
-    {
+    {        
         spedd = speed;
         anim = GetComponent<Animator>();
     }
@@ -34,6 +34,7 @@ public class FPSMoving : MonoBehaviour
         }
         else if (Input.GetKey(KeyCode.DownArrow))
         {
+            anim.SetTrigger("WalkBack");
             transform.position -= transform.forward * speed * Time.deltaTime;
         }
         else if (Input.GetKey(KeyCode.LeftArrow))
@@ -47,6 +48,7 @@ public class FPSMoving : MonoBehaviour
         else
         {
             anim.SetTrigger("idle");
+      
         }
     }
 }

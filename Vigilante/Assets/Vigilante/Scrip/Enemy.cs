@@ -14,7 +14,7 @@ public class Enemy : MonoBehaviour {
     public Estados estado;
 
     public NavMeshAgent nav;
-    Vector3 uiltima_posicion;
+    public Vector3 uiltima_posicion;
     
     public GameObject hero;
     public float distancia = 5;
@@ -95,16 +95,16 @@ public class Enemy : MonoBehaviour {
     {
         nav.SetDestination(uiltima_posicion);
         if (Apuntar())
-        {
+        {           
             timer2 -= Time.deltaTime;
             if (timer2 <0)
             {
                 disparar();
-            }
-            
+            }          
         }
         else
-        {           
+        {
+            print((uiltima_posicion - transform.position).magnitude);
             if ((uiltima_posicion - transform.position).magnitude < 1)
             {
                 estado = Estados.Patrullando;
