@@ -104,7 +104,6 @@ public class Enemy : MonoBehaviour {
         }
         else
         {
-            print((uiltima_posicion - transform.position).magnitude);
             if ((uiltima_posicion - transform.position).magnitude < 1)
             {
                 estado = Estados.Patrullando;

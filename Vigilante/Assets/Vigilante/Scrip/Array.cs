@@ -56,8 +56,6 @@ public class Array : MonoBehaviour {
             sumatoria_b += (i+1);
         }
         sumatoria_b += 10;
-        print(sumatoria_a);
-        print(sumatoria_b);
         print("FALTA EL" + (sumatoria_b-sumatoria_a));
     }
 
